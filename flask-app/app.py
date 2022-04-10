@@ -28,14 +28,15 @@ def login():
 
 		if 'frame-file' in request.files:
 			now = datetime.now()
-			now_string = now.strftime("%y-%m-%d-%h-%m-%s")
-			frame_file_path = os.path.join(app.config['UPLOAD_FOLDER'],'image_' + now_string + '.png')
+			now_string = now.strftime("%y-%m-%d-%h-%M-%s")
+			frame_file_name = 'image_' + now_string + '.png'
+			frame_file_path = os.path.join(app.config['UPLOAD_FOLDER'],frame_file_name)
 			frame_file = request.files["frame-file"]
-			frame_file.save(frame_file_path)
+			frame_file.save(frame_file_name)
 		else:
 			frame_file_path = os.path.join(app.config['UPLOAD_FOLDER'],'default.png')
 
-		cursor.execute('''INSERT INTO report_list (type, latitude, longitude, description, frame) VALUES(%s,%s,%s,%s,%s)''',(reportType,latitude,longitude,description, frame_file_path))
+		cursor.execute('''INSERT INTO report_list (type, latitude, longitude, description, frame) VALUES(%s,%s,%s,%s,%s)''',(reportType,latitude,longitude,description, frame_file_name))
 		mysql.connection.commit()
 		cursor.close()
 		return "Submitted!"
