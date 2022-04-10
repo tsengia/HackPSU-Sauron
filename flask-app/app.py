@@ -54,4 +54,4 @@ def login():
 		return "Submitted!"
 
 shutil.copyfile("default-frame.png", "static/frames/default-frame.png")
-app.run(host='0.0.0.0', port=5000)
+app.run(host='0.0.0.0', port=5000, ssl_context=("../cert.pem","../key.pem"))
