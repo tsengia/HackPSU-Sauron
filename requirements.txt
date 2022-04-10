@@ -3,3 +3,4 @@ flask
 numpy
 mysqlclient
 flask-mysqldb
+mysql-connector-python
