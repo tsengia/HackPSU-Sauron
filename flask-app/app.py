@@ -46,11 +46,12 @@ def login():
 			frame_file = request.files["frame-file"]
 			frame_file.save(frame_file_path)
 		else:
-			frame_file_path = os.path.join(app.config['UPLOAD_FOLDER'],'default-frame.png')
+			frame_file_name = 'default-frame.png'
 
 		cursor.execute('''INSERT INTO report_list (type, latitude, longitude, description, frame) VALUES(%s,%s,%s,%s,%s)''',(reportType,latitude,longitude,description, frame_file_name))
 		mysql.connection.commit()
 		cursor.close()
 		return "Submitted!"
 
+shutil.copyfile("default-frame.png", "static/frames/default-frame.png")
 app.run(host='0.0.0.0', port=5000)
