@@ -1,6 +1,10 @@
-# Install apt packages we need
-apt-get install -y adduser libfontconfig1 wget default-mysql-client python3-pip python3-dev default-libmysqlclient-dev build-essential
 
+# Install apt packages we need
+sudo apt-get install -y adduser libfontconfig1 wget default-mysql-client python3-pip python3-dev default-libmysqlclient-dev build-essential ffmpeg
+
+do curl -L https://yt-dl.org/downloads/latest/youtube-dl -o /usr/local/bin/youtube-dl
+
+sudo chmod a+rx /usr/local/bin/youtube-dl
 # Upgrade pip
 pip install --upgrade pip setuptools wheel
 
