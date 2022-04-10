@@ -40,7 +40,7 @@
             {
               "targetBlank": true,
               "title": "Event Image",
-              "url": "http://hack-sauron.mooo.com:5000/static/frames/${__data.fields.frame}"
+              "url": "https://hack-sauron.mooo.com:5000/static/frames/${__data.fields.frame}"
             }
           ],
           "mappings": [],
@@ -158,7 +158,7 @@
         ]
       },
       "gridPos": {
-        "h": 15,
+        "h": 9,
         "w": 12,
         "x": 0,
         "y": 0
@@ -186,7 +186,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  reportID AS \"ID\",\n  timestamp AS \"Time\",\n  type AS \"Type\",\n  reporter AS \"Reporter\",\n  description AS \"Description\",\n  frame\nFROM report_list\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "rawSql": "SELECT\n  reportID AS \"ID\",\n  timestamp AS \"Time\",\n  reportType AS \"Type\",\n  reporter AS \"Reporter\",\n  description AS \"Description\",\n  frame\nFROM report_list\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
           "refId": "A",
           "select": [
             [
@@ -266,14 +266,15 @@
           ]
         }
       ],
-      "title": "Report List",
+      "title": "Event List",
       "type": "table"
     },
     {
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "fixedColor": "dark-purple",
+            "mode": "fixed"
           },
           "custom": {
             "hideFrom": {
@@ -286,7 +287,7 @@
             {
               "targetBlank": true,
               "title": "EventImage",
-              "url": "http://hack-sauron.mooo.com:5000/static/frames/${__data.fields.frame}"
+              "url": "https://hack-sauron.mooo.com:5000/static/frames/${__data.fields.frame}"
             }
           ],
           "mappings": [],
@@ -296,10 +297,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -331,6 +328,21 @@
               {
                 "id": "unit",
                 "value": "none"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
               }
             ]
           }
@@ -417,7 +429,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": false,
-          "rawSql": "SELECT\n  timestamp AS \"time\",\n  latitude,\n  longitude,\n  reportID AS \"ID\",\n  frame\nFROM report_list\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  latitude,\n  longitude,\n  reportID AS \"ID\",\n  frame\nFROM report_list\nORDER BY timestamp",
           "refId": "A",
           "select": [
             [
@@ -462,17 +474,239 @@
           "table": "report_list",
           "timeColumn": "timestamp",
           "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
+          "where": []
         }
       ],
-      "title": "Crisis Map",
+      "title": "Event Map",
+      "transformations": [],
       "type": "geomap"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "Source URL",
+              "url": "https://youtube.com/watch?v=${__data.fields.link}"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 157
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 79
+              },
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Lat"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 74
+              },
+              {
+                "id": "custom.align",
+                "value": "center"
+              },
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Long"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 71
+              },
+              {
+                "id": "unit",
+                "value": "degree"
+              },
+              {
+                "id": "custom.align",
+                "value": "center"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "link"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 10,
+      "interval": "1",
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Name"
+          }
+        ]
+      },
+      "pluginVersion": "8.4.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "F8ABicU7k"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  sourceID AS \"time\",\n  name AS \"Name\",\n  latitude AS \"Lat\",\n  longitude AS \"Long\",\n  description AS \"Description\",\n  link\nFROM source_list\nORDER BY sourceID",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "name"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "Name"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "latitude"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "Lat"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "longitude"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "Long"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "description"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "Description"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "link"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "source_list",
+          "timeColumn": "sourceID",
+          "timeColumnType": "int",
+          "where": []
+        }
+      ],
+      "title": "Sources List",
+      "type": "table"
     }
   ],
   "refresh": "5s",
@@ -503,6 +737,6 @@
   "timezone": "",
   "title": "SauronDashboard",
   "uid": "WLo3ldU7z",
-  "version": 29,
+  "version": 56,
   "weekStart": ""
 }
