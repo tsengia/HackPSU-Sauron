@@ -36,6 +36,13 @@
             "displayMode": "color-text",
             "filterable": true
           },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "Event Image",
+              "url": "http://hack-sauron.mooo.com:5000/static/frames/${__data.fields.frame}"
+            }
+          ],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -67,12 +74,12 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "reportID"
+              "options": "frame"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 37
+                "id": "custom.hidden",
+                "value": true
               }
             ]
           },
@@ -123,11 +130,35 @@
                 "value": 106
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Description"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 582
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ID"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 57
+              }
+            ]
           }
         ]
       },
       "gridPos": {
-        "h": 9,
+        "h": 15,
         "w": 12,
         "x": 0,
         "y": 0
@@ -149,13 +180,13 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "NQCbXOU7z"
+            "uid": "F8ABicU7k"
           },
           "format": "table",
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  timestamp AS \"Time\",\n  type AS \"Type\",\n  reporter AS \"Reporter\",\n  description AS \"Description\"\nFROM report_list\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "rawSql": "SELECT\n  reportID AS \"ID\",\n  timestamp AS \"Time\",\n  type AS \"Type\",\n  reporter AS \"Reporter\",\n  description AS \"Description\",\n  frame\nFROM report_list\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
           "refId": "A",
           "select": [
             [
@@ -199,6 +230,28 @@
                 ],
                 "type": "alias"
               }
+            ],
+            [
+              {
+                "params": [
+                  "frame"
+                ],
+                "type": "column"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "reportID"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "ID"
+                ],
+                "type": "alias"
+              }
             ]
           ],
           "table": "report_list",
@@ -229,6 +282,13 @@
               "viz": false
             }
           },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "EventImage",
+              "url": "http://hack-sauron.mooo.com:5000/static/frames/${__data.fields.frame}"
+            }
+          ],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -243,12 +303,41 @@
               }
             ]
           },
-          "unit": "lengthmi"
+          "unit": "degree"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "frame"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ID"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 13,
+        "h": 15,
         "w": 12,
         "x": 12,
         "y": 0
@@ -283,12 +372,12 @@
                   "mode": "mod"
                 },
                 "size": {
-                  "fixed": 11,
+                  "fixed": 8,
                   "max": 15,
                   "min": 2
                 },
                 "symbol": {
-                  "fixed": "img/icons/marker/square.svg",
+                  "fixed": "img/icons/marker/triangle.svg",
                   "mode": "fixed"
                 },
                 "textConfig": {
@@ -322,13 +411,13 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "NQCbXOU7z"
+            "uid": "F8ABicU7k"
           },
           "format": "table",
           "group": [],
           "metricColumn": "none",
           "rawQuery": false,
-          "rawSql": "SELECT\n  timestamp AS \"time\",\n  latitude,\n  longitude\nFROM report_list\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  latitude,\n  longitude,\n  reportID AS \"ID\",\n  frame\nFROM report_list\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
           "refId": "A",
           "select": [
             [
@@ -343,6 +432,28 @@
               {
                 "params": [
                   "longitude"
+                ],
+                "type": "column"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "reportID"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "ID"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "frame"
                 ],
                 "type": "column"
               }
@@ -392,6 +503,6 @@
   "timezone": "",
   "title": "SauronDashboard",
   "uid": "WLo3ldU7z",
-  "version": 20,
+  "version": 29,
   "weekStart": ""
 }
