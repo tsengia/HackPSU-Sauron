@@ -3,22 +3,12 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'flask'
+app.config['MYSQL_HOST'] = input("Enter MySQL hostname: ")
+app.config['MYSQL_USER'] = input("Enter username: ")
+app.config['MYSQL_PASSWORD'] = input("Enter password: ")
+app.config['MYSQL_DB'] = "sauron-db-dev1"
  
 mysql = MySQL(app) 
-#Creating a connection cursor
-#cursor = mysql.connection.cursor()
- 
-#Executing SQL Statements
-#cursor.execute(''' INSERT INTO report_list VALUES (type,latitude,longitude,description);''')
-#Saving the Actions performed on the DB
-#mysql.connection.commit()
- 
-#Closing the cursor
-#cursor.close()
 
 @app.route('/form')
 def form():
