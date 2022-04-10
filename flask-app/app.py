@@ -26,7 +26,19 @@ def clear_data():
 	shutil.rmtree("static/frames")
 	os.mkdir("static/frames")
 	shutil.copyfile("default-frame.png", "static/frames/default-frame.png")
-	return "Cleared data."
+	return "Cleared reports."
+
+@app.route('/clearall', methods=['GET'])
+def clear_all():
+	cursor = mysql.connection.cursor()
+	cursor.execute('DELETE FROM report_list WHERE 1=1')
+	cursor.execute('DELETE FROM source_list WHERE 1=1')
+	mysql.connection.commit()
+	cursor.close()
+	shutil.rmtree("static/frames")
+	os.mkdir("static/frames")
+	shutil.copyfile("default-frame.png", "static/frames/default-frame.png")
+	return "Cleared reports and sources."
 
 @app.route('/', methods = ['GET', 'POST'])
 def login():
