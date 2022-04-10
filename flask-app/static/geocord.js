@@ -8,11 +8,11 @@ function fillPosition(position_event) {
 
 function checkLocation() {
 	if (navigator.geolocation) {
-		navigation.geolocation.getCurrentPosition(fillPosition);
+		navigator.geolocation.getCurrentPosition(fillPosition);
 	}	
 	else {
 		console.log("Unable to grab geolocation.");
 	}
 }
 
-document.body.onload = checkLocation;
+window.onload = checkLocation;
