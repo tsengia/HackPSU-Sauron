@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+import shutil
 
 from flask import Flask,render_template,request
 from flask_mysqldb import MySQL
@@ -13,6 +14,17 @@ app.config['MYSQL_DB'] = "sauron-db-dev1"
 app.config['UPLOAD_FOLDER'] = "static/frames"
 
 mysql = MySQL(app)
+
+@app.route('/clear', methods=['GET'])
+def clear_data():
+    cursor = mysql.connection.cursor()
+    cursor.execute('DELETE FROM report_list WHERE 1=1')
+    mysql.connection.commit()
+    cursor.close()
+    shutil.rmtree("static/frames")
+    os.mkdir("static/frames")
+    shutil.copyfile("default-frame.png", "static/frames/default-frame.png")
+    printf("Cleared data.")
 
 @app.route('/', methods = ['GET', 'POST'])
 def login():
@@ -32,9 +44,9 @@ def login():
 			frame_file_name = 'image_' + now_string + '.png'
 			frame_file_path = os.path.join(app.config['UPLOAD_FOLDER'],frame_file_name)
 			frame_file = request.files["frame-file"]
-			frame_file.save(frame_file_name)
+			frame_file.save(frame_file_path)
 		else:
-			frame_file_path = os.path.join(app.config['UPLOAD_FOLDER'],'default.png')
+			frame_file_path = os.path.join(app.config['UPLOAD_FOLDER'],'default-frame.png')
 
 		cursor.execute('''INSERT INTO report_list (type, latitude, longitude, description, frame) VALUES(%s,%s,%s,%s,%s)''',(reportType,latitude,longitude,description, frame_file_name))
 		mysql.connection.commit()
