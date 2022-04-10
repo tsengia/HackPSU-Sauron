@@ -12,8 +12,8 @@ import mysql.connector
 OUTPUT_DIR="flask-app/static/frames/"
 
 stream_prefix="https://youtube.com/watch?v="
-stream_ids=["YByJ2h0T5JY","1EiC9bvVGnk","y0pEGfaKi50"]
-stream_formats=[95,95,95]
+stream_ids=["YByJ2h0T5JY","1EiC9bvVGnk","y0pEGfaKi50","XoNZZJyRpUc","rQ55zQZjUro"]
+stream_formats=[95,95,95,95,95]
 
 DB_ADDR = input("Input MySQL IP Addr: ")
 DB_USER = input("Input MySQL User: ")
@@ -45,6 +45,8 @@ camera_location = {
     9: (40.791753925057584, -77.85720656188117),
    10: (40.76004196744249, -77.87800418253835),
 }
+
+camera_freqs = [0.5, 1, 2, 0.25, 1]
 
 def getImage(i):
     ret,img = camera_captures[i].read()
@@ -82,10 +84,9 @@ def readImage(i):
         if not ret:
             print("Bad return value for getImage!")
             continue
-        if anom_counter >= 60:
+        if anom_counter >= int(60*10*len(camera_captures)*camera_freqs[i]):
             anom_counter = 0
             img = createIncident(img)
-        #print(f"{i}Incident: {checkIncident(img)}")
         if checkIncident(img):
             numImages += 1
             filename = f'AnomolousImage{i}_{numImages}.jpg'
@@ -100,10 +101,11 @@ def sendSQL(conn, i, frame_file_name):
     lon = camera_location[i+1][1]
     reporter = "Camera #" + str(i)
     description = f"Camera detected anomoly."
-    cursor.execute(f"INSERT INTO report_list (type, latitude, longitude, reporter, description, frame) VALUES ('{crisis_type}', {lat}, {lon}, '{i}', '{description}', '{frame_file_name}');")
+    cursor.execute(f"INSERT INTO report_list (type, latitude, longitude, reporter, description, frame) VALUES ('{crisis_type}', {lat}, {lon}, '{reporter}', '{description}', '{frame_file_name}');")
     conn.commit()
 
 ##readImage(0)
 for i in range(0,len(camera_captures)):
     imagesThreads = Thread(target=readImage, args=(i,))
     imagesThreads.start()
+
