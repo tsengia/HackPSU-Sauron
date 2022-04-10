@@ -1,4 +1,5 @@
-opencv-python
+opencv-python-headless<4.3
 flask
 numpy
-cv2
+mysqlclient
+flask-mysqldb
