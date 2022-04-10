@@ -105,12 +105,12 @@ def readImage(i):
 
 def sendSQL(conn, i, frame_file_name):
     cursor = conn.cursor()
-    crisis_type = "Camera Detected Traffic Anomoly"
+    crisis_type = "Traffic"
     lat = camera_location[i][0]
     lon = camera_location[i][1]
     reporter = "Camera #" + str(i)
     description = f"Camera detected anomoly."
-    cursor.execute(f"INSERT INTO report_list (type, latitude, longitude, reporter, description, frame) VALUES ('{crisis_type}', {lat}, {lon}, '{reporter}', '{description}', '{frame_file_name}');")
+    cursor.execute(f"INSERT INTO report_list (reportType, latitude, longitude, reporter, description, frame) VALUES ('{crisis_type}', {lat}, {lon}, '{reporter}', '{description}', '{frame_file_name}');")
     conn.commit()
 
 ##readImage(0)
