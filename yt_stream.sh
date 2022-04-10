@@ -11,4 +11,4 @@ STREAM_URL=${stream_prefix}${stream_ids[$1]}
 OUTPUT_URL="udp://127.0.0.1:"${ports[$1]}
 
 # Start streaming
-ffmpeg -i $(youtube-dl -f 95 -g $STREAM_URL -vf fps=10 -f mpegts $OUTPUT_URL
+ffmpeg -i $(youtube-dl -f 95 -g $STREAM_URL ) -vf fps=10 -f mpegts $OUTPUT_URL
