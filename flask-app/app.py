@@ -4,7 +4,9 @@ import shutil
 
 from flask import Flask,render_template,request
 from flask_mysqldb import MySQL
+from werkzeug.utils import secure_filename
 
+ALLOWED_EXTENSIONS = set(['bmp', 'png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = input("Enter MySQL hostname: ")
@@ -17,14 +19,14 @@ mysql = MySQL(app)
 
 @app.route('/clear', methods=['GET'])
 def clear_data():
-    cursor = mysql.connection.cursor()
-    cursor.execute('DELETE FROM report_list WHERE 1=1')
-    mysql.connection.commit()
-    cursor.close()
-    shutil.rmtree("static/frames")
-    os.mkdir("static/frames")
-    shutil.copyfile("default-frame.png", "static/frames/default-frame.png")
-    return "Cleared data."
+	cursor = mysql.connection.cursor()
+	cursor.execute('DELETE FROM report_list WHERE 1=1')
+	mysql.connection.commit()
+	cursor.close()
+	shutil.rmtree("static/frames")
+	os.mkdir("static/frames")
+	shutil.copyfile("default-frame.png", "static/frames/default-frame.png")
+	return "Cleared data."
 
 @app.route('/', methods = ['GET', 'POST'])
 def login():
@@ -38,10 +40,12 @@ def login():
 		description = request.form['description']
 		cursor = mysql.connection.cursor()
 
-		if 'frame-file' in request.files:
+		if 'frame-file' in request.files and request.files['frame-file'].filename != '':
 			now = datetime.now()
 			now_string = now.strftime("%y-%m-%d-%h-%M-%s")
-			frame_file_name = 'image_' + now_string + '.png'
+			sanitized_name = secure_filename(request.files['frame-file'].filename)
+			ext = os.path.splitext(sanitized_name)[-1]
+			frame_file_name = 'image_' + now_string + ext
 			frame_file_path = os.path.join(app.config['UPLOAD_FOLDER'],frame_file_name)
 			frame_file = request.files["frame-file"]
 			frame_file.save(frame_file_path)
