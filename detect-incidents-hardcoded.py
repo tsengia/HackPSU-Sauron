@@ -34,16 +34,16 @@ for i,sid in enumerate(stream_ids):
         print("Failed to add capture for " + sid + "!")
 
 camera_location = {
-    1: (40.794283574885, -77.86160950086462),
-    2: (40.80815035162377, -77.85774100463853),
-    3: (40.80363808326678, -77.88414215231585),
-    4: (40.79683529903736, -77.87240905897102),
-    5: (40.78510824839257, -77.83438908645542),
-    6: (40.786435036283976, -77.87215718362314),
-    7: (40.785504344187125, -77.86173538975947),
-    8: (40.80327992398894, -77.86239705144267),
-    9: (40.791753925057584, -77.85720656188117),
-   10: (40.76004196744249, -77.87800418253835),
+    0: (40.794283574885, -77.86160950086462),
+    1: (40.80815035162377, -77.85774100463853),
+    2: (40.80363808326678, -77.88414215231585),
+    3: (40.79683529903736, -77.87240905897102),
+    4: (40.78510824839257, -77.83438908645542),
+    5: (40.786435036283976, -77.87215718362314),
+    6: (40.785504344187125, -77.86173538975947),
+    7: (40.80327992398894, -77.86239705144267),
+    8: (40.791753925057584, -77.85720656188117),
+    9: (40.76004196744249, -77.87800418253835),
 }
 
 camera_freqs = [0.5, 1, 2, 0.25, 1]
@@ -73,6 +73,15 @@ def readImage(i):
     global DB_ADDR, DB_USER
     conn = mysql.connector.connect(host=DB_ADDR, database='sauron-db-dev1', user=DB_USER, password=DB_PASS)
     print("Runner #" + str(i) + " Connected to DB.")
+    cursor = conn.cursor()
+    cam_name = "Camera #" + str(i)
+    lat = camera_location[i][0]
+    lon = camera_location[i][1]
+    description = f"Youtube Camera Source"
+    stream_url = stream_ids[i]
+    cursor.execute(f"INSERT INTO source_list (name, latitude, longitude, description, link) VALUES ('{cam_name}', {lat}, {lon}, '{description}', '{stream_url}');")
+    conn.commit()
+    print("Runner #" + str(i) + " Registered in DB.")
     counter = 0
     numImages = 0
     anom_counter = 0
@@ -97,8 +106,8 @@ def readImage(i):
 def sendSQL(conn, i, frame_file_name):
     cursor = conn.cursor()
     crisis_type = "Camera Detected Traffic Anomoly"
-    lat = camera_location[i+1][0]
-    lon = camera_location[i+1][1]
+    lat = camera_location[i][0]
+    lon = camera_location[i][1]
     reporter = "Camera #" + str(i)
     description = f"Camera detected anomoly."
     cursor.execute(f"INSERT INTO report_list (type, latitude, longitude, reporter, description, frame) VALUES ('{crisis_type}', {lat}, {lon}, '{reporter}', '{description}', '{frame_file_name}');")
