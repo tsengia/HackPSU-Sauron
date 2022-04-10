@@ -24,7 +24,7 @@ def clear_data():
     shutil.rmtree("static/frames")
     os.mkdir("static/frames")
     shutil.copyfile("default-frame.png", "static/frames/default-frame.png")
-    print("Cleared data.")
+    return "Cleared data."
 
 @app.route('/', methods = ['GET', 'POST'])
 def login():
